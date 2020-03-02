@@ -228,6 +228,21 @@ func betting(bank []int) []int{
 	return bets
 }
 
+func check_Blackjack(players [][]int, dealer []int) (bool) {
+	blackjacks := false
+	for i := 0; i < len(players); i++ {
+		if get_value(players[i]) == 21 {
+			fmt.Println("Player", i+1, "has Blackjack.")
+			blackjacks = true
+		}
+	}
+	if get_value(dealer) == 21 {
+		fmt.Println("Dealer has Blackjack.")
+		blackjacks = true
+	}
+	return blackjacks
+}
+
 /*
 Description:
 	Takes bets from players and then deals 2 cards to every player
@@ -287,6 +302,18 @@ func winners(players [][]int, bank []int, bets []int, dealer []int) []int {
 			fmt.Println("Player", (i+1), "lost")
 			bank[i] -= bets[i]
 			fmt.Println("New balance:", bank[i])
+		}
+	}
+	return bank
+}
+
+
+func blackjack_winners(players [][]int, bank []int, bets []int, dealer []int) []int {
+	for i := 0; i < len(players); i++ {
+		if get_value(players[i]) == 21 {
+			bank[i] += (bets[i] + (bets[i] / 2))
+		} else {
+			bank[i] -= bets[i]
 		}
 	}
 	return bank

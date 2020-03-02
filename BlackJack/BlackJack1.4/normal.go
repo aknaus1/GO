@@ -16,14 +16,14 @@ Return:
 	player - cards now held by the player
 	deck - cards that hevent been dealt
 */
-func bplayer_play(player []int, deck []int, dealer int) ([]int, []int){
+func nplayer_play(player []int, deck []int, dealer int) ([]int, []int){
 	var choice string
 	fmt.Printf("The dealer is showing a ")
 	print_card(dealer)
 	fmt.Println()
 	fmt.Printf("Your cards: ")
 	print_hand(player)
-	for get_value(player) <= 21{
+	for get_value(player) < 21{
 		fmt.Println("Hit or stay?")
 		fmt.Scan(&choice)
 		if choice == "hit" {
@@ -47,12 +47,17 @@ Parameters:
 Return:
 	bank - new balances held by all players
 */
-func bplay (bank []int) ([]int){
+func nplay (bank []int) ([]int){
 	players, dealer, deck, bets := start(bank)
+	blackjack := check_Blackjack(players, dealer)
+	if blackjack {
+		bank = blackjack_winners(players, bank, bets, dealer)
+		return bank
+	}
 	for i := 0; i < len(players); i++ {
 		if bank[i] > 0 {
 			fmt.Println("Player", (i+1),"s turn.")
-			players[i], deck = bplayer_play(players[i], deck, dealer[0])
+			players[i], deck = nplayer_play(players[i], deck, dealer[0])
 			if get_value(players[i]) > 21 {
 				fmt.Println("Player", (i+1)," busted.")
 			}
@@ -66,11 +71,11 @@ func bplay (bank []int) ([]int){
 	return bank
 }
 
-func basic(bank []int, numPlayers int, input_yes []string, input_no []string) {
+func normal(bank []int, numPlayers int, input_yes []string, input_no []string) {
 	var choice string
 	var response bool
   for i := 0; i < 1; i = i {
-		bank = bplay(bank)
+		bank = nplay(bank)
 		left := checkBalances(bank, numPlayers)
 		if left {
 			fmt.Println("Would you like to play again?")

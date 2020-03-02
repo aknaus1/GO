@@ -48,7 +48,7 @@ func sign_in() ([]string, []string, string){
 	check(err1)
 	input_no, err2 := read_file("default", "no")
 	check(err2)
-	fmt.Println("Have you played before?")
+	fmt.Println("Have you played with us before?")
 	fmt.Scan(&input)
 	response, input_yes, input_no= get_response(input, input_yes, input_no)
 	if response {

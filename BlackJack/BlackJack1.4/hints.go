@@ -23,7 +23,7 @@ func hplayer_play(player []int, deck []int, dealer int) ([]int, []int){
 	fmt.Println()
 	fmt.Printf("Your cards: ")
 	print_hand(player)
-	for get_value(player) <= 21{
+	for get_value(player) < 21{
 		if get_value(player) < 17 {
 			fmt.Println("Hit or stay? (Suggestion: Hit)")
 		} else {
@@ -53,6 +53,11 @@ Return:
 */
 func hplay (bank []int) ([]int){
 	players, dealer, deck, bets := start(bank)
+	blackjack := check_Blackjack(players, dealer)
+	if blackjack {
+		bank = blackjack_winners(players, bank, bets, dealer)
+		return bank
+	}
 	for i := 0; i < len(players); i++ {
 		if bank[i] > 0 {
 			fmt.Println("Player", (i+1),"s turn.")
