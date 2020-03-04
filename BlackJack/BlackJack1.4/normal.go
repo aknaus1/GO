@@ -73,7 +73,7 @@ func nplay (bank []int) ([]int){
 
 func normal(bank []int, numPlayers int, input_yes []string, input_no []string) {
 	var choice string
-	var response bool
+	var response int
   for i := 0; i < 1; i = i {
 		bank = nplay(bank)
 		left := checkBalances(bank, numPlayers)
@@ -81,7 +81,7 @@ func normal(bank []int, numPlayers int, input_yes []string, input_no []string) {
 			fmt.Println("Would you like to play again?")
 			fmt.Scan(&choice)
 			response, input_yes, input_no = get_response(choice, input_yes, input_no)
-			if response == false {
+			if response == 0 {
 				i = 1
 			}
 		} else {

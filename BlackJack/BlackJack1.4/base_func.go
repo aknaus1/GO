@@ -15,22 +15,26 @@ func check_array (a string, list []string) bool {
 	return false
 }
 
-func get_response(input string, input_yes []string, input_no []string) (bool, []string, []string) {
+func get_response(input string, input_yes []string, input_no []string) (int, []string, []string) {
 	var new_input []string
 	for true {
 		if check_array(input, input_yes) {
 			input_yes = append(input_yes, new_input...)
-			return true, input_yes, input_no
+			return 0, input_yes, input_no
 		} else if check_array(input, input_no) {
 			input_no = append(input_no, new_input...)
-			return false, input_yes, input_no
+			return 1, input_yes, input_no
+		} else if input == "69" {
+			return 2, input_yes, input_no
+		} else if input == "420" {
+			return 3, input_yes, input_no
 		} else {
 			fmt.Println("Sorry I didn't quite understand that. Please input yes or no?")
 			new_input = append(new_input, input)
 			fmt.Scan(&input)
 		}
 	}
-	return false, input_yes, input_no
+	return 1, input_yes, input_no
 }
 
 /*
@@ -41,10 +45,10 @@ Parameters:
 Return:
 	bank - balances of all players
 */
-func initiate(a int, input_yes []string, input_no []string) ([]int, bool, []string, []string) {
+func initiate(a int, input_yes []string, input_no []string) ([]int, int, []string, []string) {
 	var start int
 	var choice string
-	var response bool
+	var response int
 	bank := make([]int, a)
 	fmt.Println("What would you like the starting balance to be?")
 	fmt.Scan(&start)
@@ -298,7 +302,7 @@ func winners(players [][]int, bank []int, bets []int, dealer []int) []int {
 		} else if get_value(dealer) == get_value(players[i]) {
 			fmt.Println("Player", (i+1), "pushed")
 			fmt.Println("Same Balance:", bank[i])
-		} else {
+		} else if bets[i] > 0 {
 			fmt.Println("Player", (i+1), "lost")
 			bank[i] -= bets[i]
 			fmt.Println("New balance:", bank[i])
@@ -311,8 +315,10 @@ func winners(players [][]int, bank []int, bets []int, dealer []int) []int {
 func blackjack_winners(players [][]int, bank []int, bets []int, dealer []int) []int {
 	for i := 0; i < len(players); i++ {
 		if get_value(players[i]) == 21 {
+			fmt.Println("Player", (i+1), "won with blackjack")
 			bank[i] += (bets[i] + (bets[i] / 2))
-		} else {
+		} else if bets[i] > 0 {
+			fmt.Println("Player", (i+1), "lost")
 			bank[i] -= bets[i]
 		}
 	}
@@ -333,7 +339,7 @@ Return:
 */
 func dealer_play(dealer []int, deck []int, max int) ([]int, []int) {
 	fmt.Println("Dealer is starting with:", get_value(dealer))
-	for get_value(dealer) < 17 && get_value(dealer) < max {
+	for get_value(dealer) < 17 && get_value(dealer) <= max {
 		fmt.Println("Dealer hits...")
 		dealer, deck = deal(dealer, deck)
 		fmt.Println("Dealer now has:", get_value(dealer))

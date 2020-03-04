@@ -43,15 +43,15 @@ func write_file (fname string, selector string, lines []string) error{
 
 func sign_in() ([]string, []string, string){
 	var user_name, input string
-	var response bool
+	var response int
 	input_yes, err1 := read_file("default", "yes")
 	check(err1)
 	input_no, err2 := read_file("default", "no")
 	check(err2)
 	fmt.Println("Have you played with us before?")
 	fmt.Scan(&input)
-	response, input_yes, input_no= get_response(input, input_yes, input_no)
-	if response {
+	response, input_yes, input_no = get_response(input, input_yes, input_no)
+	if response == 0{
 		fmt.Println("What is your user name?")
 		fmt.Scan(&user_name)
 		input_yes, err1 = read_file(user_name, "yes")
@@ -66,12 +66,12 @@ func sign_in() ([]string, []string, string){
 
 func sign_out(user_name string, input_yes []string, input_no []string) {
 	var err error
-	var save bool
+	var save int
 	var input string
 	fmt.Println("Would you like to save your responses?")
 	fmt.Scan(&input)
 	save, input_yes, input_no = get_response(input, input_yes, input_no)
-	if save {
+	if save == 0{
 		if user_name != "" {
 			fmt.Println("Saving to", user_name, "...")
 			err = write_file(user_name, "yes", input_yes)

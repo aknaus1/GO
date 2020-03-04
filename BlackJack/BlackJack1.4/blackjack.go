@@ -11,6 +11,7 @@ Return: N/A
 */
 func main() {
 	var numPlayers int
+	//RULES AND DIRECTIONS
 	fmt.Println("----------------------------------------------------------------------------------------------------")
 	fmt.Println("Welcome to our Blackjack game!")
 	fmt.Println("The goal of Blackjack is to get as close to 21 as possible without going over.")
@@ -27,14 +28,23 @@ func main() {
 	fmt.Println("All players with Blackjack recieve 1.5 x the value of their bets.")
 	fmt.Println("Those without Blackjack lose the value of their bets as they would normally.")
 	fmt.Println("----------------------------------------------------------------------------------------------------")
+	//sign_in LOCATED IN file_management.go
 	input_yes, input_no, user_name := sign_in()
 	fmt.Println("How many players?")
 	fmt.Scan(&numPlayers)
+	//initiate LOCATED IN base_func.go
 	bank, easy, input_yes, input_no := initiate(numPlayers, input_yes, input_no)
-	if easy{
+	if easy == 0{
+		//goto hints.go
 		hints(bank, numPlayers, input_yes, input_no)
-	} else {
+	} else if easy == 1{
+		//goto normal.go
 		normal(bank, numPlayers, input_yes, input_no)
+	} else if easy == 2{
+		sym(bank, numPlayers, input_yes, input_no)
+	} else {
+		cheat(bank, numPlayers, input_yes, input_no)
 	}
+	//sign_out LOCATED IN file_management.go
 	sign_out(user_name, input_yes, input_no)
 }

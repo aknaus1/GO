@@ -16,15 +16,17 @@ Return:
 	player - cards now held by the player
 	deck - cards that hevent been dealt
 */
-func hplayer_play(player []int, deck []int, dealer int) ([]int, []int){
+func cplayer_play(player []int, deck []int, dealer int) ([]int, []int){
 	var choice string
 	fmt.Printf("The dealer is showing a ")
 	print_card(dealer)
 	fmt.Println()
 	fmt.Printf("Your cards: ")
 	print_hand(player)
-	for get_value(player) < 21{
-		if get_value(player) < 17 {
+	for get_value(player) < 21 {
+		temp := make([]int, 1)
+		temp[0] = deck[0]
+		if get_value(player) + get_value(temp) <= 21 {
 			fmt.Println("Hit or stay? (Suggestion: Hit)")
 		} else {
 			fmt.Println("Hit or stay? (Suggestion: Stay)")
@@ -51,7 +53,7 @@ Parameters:
 Return:
 	bank - new balances held by all players
 */
-func hplay (bank []int) ([]int){
+func cplay (bank []int) ([]int){
 	players, dealer, deck, bets := start(bank)
 	blackjack := check_Blackjack(players, dealer)
 	if blackjack {
@@ -61,7 +63,7 @@ func hplay (bank []int) ([]int){
 	for i := 0; i < len(players); i++ {
 		if bank[i] > 0 {
 			fmt.Println("Player", (i+1),"s turn.")
-			players[i], deck = hplayer_play(players[i], deck, dealer[0])
+			players[i], deck = cplayer_play(players[i], deck, dealer[0])
 			if get_value(players[i]) > 21 {
 				fmt.Println("Player", (i+1)," busted.")
 			}
@@ -75,17 +77,17 @@ func hplay (bank []int) ([]int){
 	return bank
 }
 
-func hints(bank []int, numPlayers int, input_yes []string, input_no []string) {
+func cheat(bank []int, numPlayers int, input_yes []string, input_no []string) {
   var choice string
 	var response int
   for i := 0; i < 1; i = i {
-		bank = hplay(bank)
+		bank = cplay(bank)
 		left := checkBalances(bank, numPlayers)
 		if left {
 			fmt.Println("Would you like to play again?")
 			fmt.Scan(&choice)
 			response, input_yes, input_no = get_response(choice, input_yes, input_no)
-			if response == 0 {
+			if response == 1 {
 				i = 1
 			}
 		} else {
